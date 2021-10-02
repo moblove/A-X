@@ -1,0 +1,61 @@
+package test;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+public class softwareEngineering {
+	static List<String> list=new ArrayList<>();
+	public static void read_formated_text(String file_name) throws IOException {
+		//读取文件中的内容
+		File file = new File(file_name);
+		BufferedReader reader=null;
+		InputStreamReader inputStream = new InputStreamReader(new FileInputStream(file), "GBK");
+		reader = new BufferedReader(inputStream);
+		//读出一行，将值赋给a
+		String a = reader.readLine();
+		while((a = reader.readLine())!= null)
+		{
+		//把a里的内容存放到list中
+		list.add(a);
+		}
+		inputStream.close();
+		reader.close();
+	}
+	
+	public static void main(String[] args) throws IOException {
+		read_formated_text("D:\\yq_in.txt");
+	
+		String[][] string = new String[list.size()][];
+		for(int i = 0;i<list.size();i++) 
+		{         
+			string[i] = list.get(i).split("\\s+");
+		}
+		File file = new File("D:\\yq_out.txt");
+		FileOutputStream out = new FileOutputStream(file);
+		OutputStreamWriter b =new OutputStreamWriter(out);
+		//初始值设为浙江省
+		String c = string[0][0];
+		b.write(c+"\r\n");
+		for(int j =0 ;j < string.length;j++) 
+		{
+		  if(string[j][0].equals(c))
+		  {
+		    //用equals来判断第一列的省份是否与c初始值“浙江省”匹配
+	        b.write(string[j][1]+"            "+string[j][2]+"\r\n");
+		  }
+		  else
+		  {
+		     b.write("\r\n"+string[j][0]+"\r\n");  
+			 b.write(string[j][1]+"            "+string[j][2]+"\r\n");
+			 //将c的值更新为下一个省份，重复while循环中的操作
+			 c = string[j][0];              
+		  }
+	    }
+		b.close();
+   }
+}
